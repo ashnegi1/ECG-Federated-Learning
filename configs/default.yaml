@@ -1,0 +1,39 @@
+seed: 42
+data:
+  database: mitdb
+  version: 1.0.0
+  root: data/raw/mitdb
+  processed: data/processed/mitdb.npz
+  records: null
+  train_records: [100, 103, 106, 108, 109, 111, 112, 113, 115, 116, 117, 119, 121, 122, 123, 124, 200, 205, 207, 209, 210, 212, 213, 214, 215, 217, 219, 220, 221, 222, 223, 228, 230, 231, 232, 233, 234]
+  test_records: [102, 104, 107, 114, 118, 208]
+  validation_records: [101, 105, 201, 202, 203]
+  lead: 0
+  before_seconds: 0.25
+  after_seconds: 0.45
+  max_records: null
+preprocessing:
+  low_hz: 0.5
+  high_hz: 45.0
+  filter_order: 4
+  wavelet: db4
+  wavelet_level: 4
+  wavelet_threshold: universal_soft
+model:
+  num_classes: 5
+  dropout: 0.25
+training:
+  batch_size: 128
+  local_epochs: 1
+  central_epochs: 10
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  class_weighting: true
+federated:
+  clients: 5
+  rounds: 5
+  strategy: fedavg
+  proximal_mu: 0.01
+  partition_slack_fraction: 0.3
+  seed: 42
+  batchnorm_policy: fedavg_full_state

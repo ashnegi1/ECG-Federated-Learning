@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecg-federated-learning"
+version = "0.1.0"
+description = "Privacy-preserving federated learning for MIT-BIH ECG arrhythmia classification"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy==2.0.2", "scipy==1.13.1", "PyWavelets==1.6.0",
+  "matplotlib==3.9.4", "scikit-learn==1.6.1", "torch==2.8.0",
+  "wfdb==4.2.0", "flwr[simulation]==1.22.0", "pandas==2.3.3",
+  "PyYAML==6.0.3"
+]
+
+[project.scripts]
+ecg-fl = "ecg_fl.cli:main"
+
+[tool.flwr.app]
+publisher = "MSIT-ECE"
+
+[tool.flwr.app.components]
+serverapp = "ecg_fl.federated.server_app:app"
+clientapp = "ecg_fl.federated.client_app:app"
+
+[tool.flwr.app.config]
+num-server-rounds = 5
+num-clients = 5
+local-epochs = 1
+batch-size = 128
+learning-rate = 0.001
+weight-decay = 0.0001
+input-length = 252
+seed = 42
+strategy = "fedavg"
+proximal-mu = 0.01
+
+[tool.flwr.federations]
+default = "local-simulation"
+
+[tool.flwr.federations.local-simulation]
+options.num-supernodes = 5
+options.backend.client-resources.num-cpus = 1
+options.backend.client-resources.num-gpus = 0.0
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
